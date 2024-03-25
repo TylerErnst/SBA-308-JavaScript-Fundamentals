@@ -150,8 +150,8 @@ const CourseInfo = {
 
     //add each submition to each student
     result.forEach((student) => {
-        totalScore = 0;
-        currentScore = 0;
+        let totalScore = 0;
+        let currentScore = 0;
         submissions.forEach((submission) => {
             //Include only assigments that have been due.
             if(dueAssignmentList.includes(submission.assignment_id)){
@@ -165,8 +165,10 @@ const CourseInfo = {
                     student[submission.assignment_id] = submission.submission.score; // <-- more math need to be done
                 }
             }
-        })    
-    })
+        }) 
+        let averageScore = currentScore/totalScore;
+        student.avg = averageScore;
+    });
 
     
     
