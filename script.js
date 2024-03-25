@@ -99,7 +99,8 @@ const CourseInfo = {
     //create student list
     let studentList = [];
     submissions.forEach((submission) => {
-        if (!studentList.includes(submission.learner_id)) {
+        let studentExists = studentList.includes(submission.learner_id);
+        if (!studentExists) {
         studentList.push(submission.learner_id);
         }
     });
@@ -128,6 +129,8 @@ const CourseInfo = {
             submission.submission.score -= latePenalty*ag.assignments[i].points_possible;
             console.log('late', latePenalty*ag.assignments[i].points_possible, 'points taken off')
             submission.submission.late = true;
+        } else {
+            submission.submission.late = false;
         }
     });
     console.log(submissions[4])
@@ -170,12 +173,21 @@ const CourseInfo = {
             if(dueAssignmentList.includes(submission.assignment_id)){
                 //Make sure assigments are assigned to the correct student
                 if (student.id === submission.learner_id) {
-                    totalScore += ag.assignments[assignmentSubmissionIndex(submission.assignment_id,ag)].points_possible;
-                    currentScore += submission.submission.score;
-                    console.log('student', student.id)
-                    console.log(totalScore)
-                    console.log(currentScore)
-                    student[submission.assignment_id] = submission.submission.score; // <-- more math need to be done
+                    try {
+                        if (ag.assignments[assignmentSubmissionIndex(submission.assignment_id,ag)].points_possible === 0) {
+                          throw new Error("Points possible cannot be 0");
+                        }else {
+                            totalScore += ag.assignments[assignmentSubmissionIndex(submission.assignment_id,ag)].points_possible;
+                            currentScore += submission.submission.score;
+                            console.log('student', student.id)
+                            console.log(totalScore)
+                            console.log(currentScore)
+                            student[submission.assignment_id] = submission.submission.score;
+                        }
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    
                 }
             }
         }) 
