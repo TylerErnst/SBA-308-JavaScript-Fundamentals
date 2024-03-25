@@ -109,12 +109,11 @@ const CourseInfo = {
     //adjust submission scores for lateness
     let latePenalty = .1;
     submissions.forEach((submission) => {
-        let i = assignmentSubmissionMatch(submissions,ag,'assignment_id','id');
+        let i = assignmentSubmissionMatch(submission.assignment_id,ag);
         let dueAt = ag.assignments[i].due_at;
         if (submission.submission.submitted_at > dueAt) {
-            latePenalty = latePenalty*ag.assignments[i].points_possible;
-            submission.submission.score = submission.submission.score - latePenalty;
-            console.log('late', latePenalty, 'points taken off')
+            submission.submission.score -= latePenalty*ag.assignments[i].points_possible;
+            console.log('late', latePenalty*ag.assignments[i].points_possible, 'points taken off')
             submission.submission.late = true;
         }
     });
@@ -151,11 +150,18 @@ const CourseInfo = {
 
     //add each submition to each student
     result.forEach((student) => {
+        totalScore = 0;
+        currentScore = 0;
         submissions.forEach((submission) => {
             //Include only assigments that have been due.
             if(dueAssignmentList.includes(submission.assignment_id)){
                 //Make sure assigments are assigned to the correct student
                 if (student.id === submission.learner_id) {
+                    totalScore += ag.assignments[assignmentSubmissionMatch(submission.assignment_id,ag)].points_possible;
+                    currentScore += submission.submission.score;
+                    console.log('student', student.id)
+                    console.log(totalScore)
+                    console.log(currentScore)
                     student[submission.assignment_id] = submission.submission.score; // <-- more math need to be done
                 }
             }
@@ -204,15 +210,13 @@ const CourseInfo = {
 
 
 
-  function assignmentSubmissionMatch(sub,ag,subKey,agKey){
-    id = 0;
-    sub.forEach((submission) => {
-        ag.assignments.forEach((assignment,i) => {
-            if (assignment[agKey] === submission[subKey]) {
-                id = i;
-            }
-        }); 
-    });
-    return id;
+  function assignmentSubmissionMatch(subId,ag){
+    let agId = 0;
+    ag.assignments.forEach((assignment,i) => {
+        if (assignment.id === subId) {
+            agId = i;
+        }
+    }); 
+    return agId;
   }
   
