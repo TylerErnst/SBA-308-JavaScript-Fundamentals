@@ -77,6 +77,19 @@ const CourseInfo = {
   ];
   
   function getLearnerData(course, ag, submissions) {
+
+
+    // If an AssignmentGroup does not belong to its course (mismatching course_id),
+    // your program should throw an error, letting the user know that the input was invalid.
+    // Similar data validation should occur elsewhere within the program.
+    try {
+        if (CourseInfo.id !== AssignmentGroup.course_id) {
+          throw new Error("Course IDs do not match");
+        }
+      }catch (error) {
+        console.log(error);
+      }
+      
     // here, we would process this data to achieve the desired result.
 
     let result = [];
@@ -227,10 +240,3 @@ const CourseInfo = {
 
 
 
-  try {
-    if (CourseInfo.id !== AssignmentGroup.course_id) {
-      throw new Error("Course IDs do not match");
-    }
-  }catch (error) {
-    console.log(error);
-  }
