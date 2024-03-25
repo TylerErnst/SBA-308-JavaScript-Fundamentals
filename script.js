@@ -154,33 +154,28 @@ function getLearnerData(course, ag, submissions) {
           if (dueAssignmentList.includes(submission.assignment_id)) {
             //Make sure assigments are assigned to the correct student
             if (student.id === submission.learner_id) {
-              try {
-                if (
-                  ag.assignments[
-                    assignmentSubmissionIndex(submission.assignment_id, ag)
-                  ].points_possible === 0
-                ) {
-                  throw new Error("Points possible cannot be 0");
-                } else {
-                  totalScore +=
-                    ag.assignments[
-                      assignmentSubmissionIndex(submission.assignment_id, ag)
-                    ].points_possible;
-                  currentScore += submission.submission.score;
-                  console.log("student", student.id);
-                  console.log(totalScore);
-                  console.log(currentScore);
-                  student[submission.assignment_id] =
-                    submission.submission.score;
-                }
-              } catch (error) {
-                console.log(error);
-              }
+              totalScore +=
+                ag.assignments[
+                  assignmentSubmissionIndex(submission.assignment_id, ag)
+                ].points_possible;
+              currentScore += submission.submission.score;
+              console.log("student", student.id);
+              console.log(totalScore);
+              console.log(currentScore);
+              student[submission.assignment_id] = submission.submission.score;
             }
           }
         });
-        let averageScore = currentScore / totalScore;
-        student.avg = averageScore;
+        try {
+          if (totalScore === 0) {
+            throw new Error("Points possible cannot be 0");
+          } else {
+            let averageScore = currentScore / totalScore;
+            student.avg = averageScore;
+          }
+        } catch (error) {
+          console.log(error);
+        }
       });
 
       // the learner’s total, weighted average, in which assignments
