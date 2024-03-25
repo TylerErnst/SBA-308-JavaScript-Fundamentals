@@ -235,7 +235,7 @@ console.log(result);
 
 
 
-
+// *****Requirements*****
 
 // Declare variables properly using let and const where appropriate.
 // Use operators to perform calculations on variables and literals.
@@ -250,4 +250,18 @@ console.log(result);
 // Program outputs processed data as described above. Partial credit will be earned depending on the level of adherence to the described behavior.
 // Ensure that the program runs without errors (comment out things that do not work, and explain your blockers - you can still receive partial credit).
 // Commit frequently to the git repository.
+// Include a README file that contains a description of your application.
+
+
+
+
+// *****Remaining*****
+
+// Use strings cached within variables.
+// Optionally, use at least one switch statement.
+// Use try/catch statements to manage potential errors in the code, such as incorrectly formatted or typed data being fed into your program.
+// Utilize at least two different types of loops.
+// Utilize at least one loop control keyword such as break or continue.
+// Demonstrate the removal of items in an array or properties in an object.
+// Use functions to handle repeated tasks.
 // Include a README file that contains a description of your application.
