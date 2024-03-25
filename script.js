@@ -138,11 +138,16 @@ function getLearnerData(course, ag, submissions) {
       let todaysdate = `${year}-${month}-${day}`;
       //get id of assignments that have been due
       let dueAssignmentList = [];
-      ag.assignments.forEach((assignment) => {
-        if (assignment.due_at <= todaysdate) {
-          dueAssignmentList.push(assignment.id);
-        }
-      });
+      for (let i = 0; i < ag.assignments.length; i++){
+        if (ag.assignments[i].due_at <= todaysdate) {
+            dueAssignmentList.push(ag.assignments[i].id);
+          }
+      }
+    //   ag.assignments.forEach((assignment) => {
+    //     if (assignment.due_at <= todaysdate) {
+    //       dueAssignmentList.push(assignment.id);
+    //     }
+    //   });
       console.log(dueAssignmentList);
 
       //add each submition to each student
