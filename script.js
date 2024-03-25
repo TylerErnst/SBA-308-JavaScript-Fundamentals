@@ -115,6 +115,7 @@ const CourseInfo = {
             latePenalty = latePenalty*ag.assignments[i].points_possible;
             submission.submission.score = submission.submission.score - latePenalty;
             console.log('late', latePenalty, 'points taken off')
+            submission.submission.late = true;
         }
     });
     console.log(submissions[4])
