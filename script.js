@@ -100,17 +100,29 @@ const CourseInfo = {
     console.log(result)
 
 
+
+
+
+
+
     console.log(submissions[4])
     //adjust submission scores for lateness
-    latePenalty = 15;
+    let latePenalty = .1;
     submissions.forEach((submission) => {
-        let dueAt = ag.assignments[assignmentSubmissionMatch(submissions,ag,'assignment_id','id')].due_at;
+        let i = assignmentSubmissionMatch(submissions,ag,'assignment_id','id');
+        let dueAt = ag.assignments[i].due_at;
         if (submission.submission.submitted_at > dueAt) {
+            latePenalty = latePenalty*ag.assignments[i].points_possible;
             submission.submission.score = submission.submission.score - latePenalty;
-            console.log('late')
+            console.log('late', latePenalty, 'points taken off')
         }
     });
     console.log(submissions[4])
+
+
+
+
+
 
     // if an assignment is not yet due, it should not be included in either
     // the average or the keyed dictionary of scores
@@ -129,6 +141,12 @@ const CourseInfo = {
         }
     });
     console.log(dueAssignmentList);
+
+
+
+
+
+
 
     //add each submition to each student
     result.forEach((student) => {
@@ -154,8 +172,7 @@ const CourseInfo = {
     // and the value associated with it should be the percentage that
     // the learner scored on the assignment (submission.score / points_possible)
 //    <assignment_id>: number,
-    // if an assignment is not yet due, it should not be included in either
-    // the average or the keyed dictionary of scores
+    
 
 
     // result = [
