@@ -198,7 +198,23 @@ const CourseInfo = {
     //     2: 0.833 // late: (140 - 15) / 150
     //   }
     // ];
+    
 
+
+    //   added inside a forEach loop of LearnerSubmissions
+    //   of the following format:
+    //          submissions.forEach((submission) => {
+    //   to find the matching assigment in the assigment group list
+    //   Returns the index of the assignment AssignmentGroup[agID];
+    function assignmentSubmissionIndex(subId,ag){
+        let agId = 0;
+        ag.assignments.forEach((assignment,i) => {
+            if (assignment.id === subId) {
+                agId = i;
+            }
+        }); 
+        return agId;
+    }
 
   
     return result;
@@ -211,18 +227,10 @@ const CourseInfo = {
 
 
 
-//   added inside a forEach loop of LearnerSubmissions
-//   of the following format:
-//          submissions.forEach((submission) => {
-//   to find the matching assigment in the assigment group list
-//   Returns the index of the assignment AssignmentGroup[agID];
-  function assignmentSubmissionIndex(subId,ag){
-    let agId = 0;
-    ag.assignments.forEach((assignment,i) => {
-        if (assignment.id === subId) {
-            agId = i;
-        }
-    }); 
-    return agId;
+  try {
+    if (CourseInfo.id !== AssignmentGroup.course_id) {
+      throw new Error("Course IDs do not match");
+    }
+  }catch (error) {
+    console.log(error);
   }
-  
