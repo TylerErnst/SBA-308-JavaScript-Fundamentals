@@ -265,7 +265,6 @@ console.log(result);
 // Use strings cached within variables.
 // Use at least two if/else statements to control program flow. Optionally, use at least one switch statement.
 // Use try/catch statements to manage potential errors in the code, such as incorrectly formatted or typed data being fed into your program.
-// Utilize at least two different types of loops.
 // Utilize at least one loop control keyword such as break or continue.
 // Demonstrate the removal of items in an array or properties in an object.
 // Use functions to handle repeated tasks.
