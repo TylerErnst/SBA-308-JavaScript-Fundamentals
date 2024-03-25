@@ -85,26 +85,68 @@ const CourseInfo = {
     
     //create student list
     let studentList = [];
-    submissions.forEach(submission =>{
+    submissions.forEach((submission) => {
+        if (!studentList.includes(submission.learner_id)) {
         studentList.push(submission.learner_id);
+        }
     });
     console.log(studentList)
 
-    //Filter duplicates
-    studentList = studentList.filter( function( item, index, inputArray ) {
-        return inputArray.indexOf(item) == index;
-    });
-
-    console.log(studentList)
 
     //fill results with students
-    studentList.forEach((student, i) => {
-        let newStudent = {};
-        newStudent.id = studentList[i];
-        result.push(newStudent);
-    })
+    studentList.forEach((student) => {
+        result.push({ id: student });    
+    });
     console.log(result)
 
+
+    console.log(submissions[4])
+    //adjust submission scores for lateness
+    submissions.forEach((submission) => {
+        ag.assignments.forEach((assignment,i) => {
+            if (assignment.id === submission.assignment_id) {
+                let dueAt = ag.assignments[i].due_at;
+            console.log('due at:', dueAt, ' Submitted at :', submission.submission.submitted_at)
+            if (submission.submission.submitted_at > dueAt) {
+                submission.submission.score = submission.submission.score - 10;
+                console.log('late')
+            }
+            }
+        });
+        
+    });
+    console.log(submissions[4])
+
+    // if an assignment is not yet due, it should not be included in either
+    // the average or the keyed dictionary of scores
+
+    //get todays year-month-day
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+    let todaysdate = `${year}-${month}-${day}`;
+    //get id of assignments that have been due
+    let dueAssignmentList = [];
+    ag.assignments.forEach((assignment) => {
+        if (assignment.due_at <= todaysdate) {
+        dueAssignmentList.push(assignment.id);
+        }
+    });
+    console.log(dueAssignmentList);
+
+    //add each submition to each student
+    result.forEach((student) => {
+        submissions.forEach((submission) => {
+            //Include only assigments that have been due.
+            if(dueAssignmentList.includes(submission.assignment_id)){
+                //Make sure assigments are assigned to the correct student
+                if (student.id === submission.learner_id) {
+                    student[submission.assignment_id] = submission.submission.score; // <-- more math need to be done
+                }
+            }
+        })    
+    })
 
     
     
