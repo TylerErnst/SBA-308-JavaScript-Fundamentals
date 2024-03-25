@@ -102,18 +102,13 @@ const CourseInfo = {
 
     console.log(submissions[4])
     //adjust submission scores for lateness
+    latePenalty = 15;
     submissions.forEach((submission) => {
-        ag.assignments.forEach((assignment,i) => {
-            if (assignment.id === submission.assignment_id) {
-                let dueAt = ag.assignments[i].due_at;
-            console.log('due at:', dueAt, ' Submitted at :', submission.submission.submitted_at)
-            if (submission.submission.submitted_at > dueAt) {
-                submission.submission.score = submission.submission.score - 10;
-                console.log('late')
-            }
-            }
-        });
-        
+        let dueAt = ag.assignments[assignmentSubmissionMatch(submissions,ag,'assignment_id','id')].due_at;
+        if (submission.submission.submitted_at > dueAt) {
+            submission.submission.score = submission.submission.score - latePenalty;
+            console.log('late')
+        }
     });
     console.log(submissions[4])
 
@@ -177,6 +172,8 @@ const CourseInfo = {
     //     2: 0.833 // late: (140 - 15) / 150
     //   }
     // ];
+
+
   
     return result;
   }
@@ -184,4 +181,20 @@ const CourseInfo = {
   const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
   
   console.log(result);
+
+
+
+
+
+  function assignmentSubmissionMatch(sub,ag,subKey,agKey){
+    id = 0;
+    sub.forEach((submission) => {
+        ag.assignments.forEach((assignment,i) => {
+            if (assignment[agKey] === submission[subKey]) {
+                id = i;
+            }
+        }); 
+    });
+    return id;
+  }
   
