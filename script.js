@@ -109,7 +109,7 @@ const CourseInfo = {
     //adjust submission scores for lateness
     let latePenalty = .1;
     submissions.forEach((submission) => {
-        let i = assignmentSubmissionMatch(submission.assignment_id,ag);
+        let i = assignmentSubmissionIndex(submission.assignment_id,ag);
         let dueAt = ag.assignments[i].due_at;
         if (submission.submission.submitted_at > dueAt) {
             submission.submission.score -= latePenalty*ag.assignments[i].points_possible;
@@ -157,7 +157,7 @@ const CourseInfo = {
             if(dueAssignmentList.includes(submission.assignment_id)){
                 //Make sure assigments are assigned to the correct student
                 if (student.id === submission.learner_id) {
-                    totalScore += ag.assignments[assignmentSubmissionMatch(submission.assignment_id,ag)].points_possible;
+                    totalScore += ag.assignments[assignmentSubmissionIndex(submission.assignment_id,ag)].points_possible;
                     currentScore += submission.submission.score;
                     console.log('student', student.id)
                     console.log(totalScore)
@@ -211,8 +211,12 @@ const CourseInfo = {
 
 
 
-
-  function assignmentSubmissionMatch(subId,ag){
+//   added inside a forEach loop of LearnerSubmissions
+//   of the following format:
+//          submissions.forEach((submission) => {
+//   to find the matching assigment in the assigment group list
+//   Returns the index of the assignment AssignmentGroup[agID];
+  function assignmentSubmissionIndex(subId,ag){
     let agId = 0;
     ag.assignments.forEach((assignment,i) => {
         if (assignment.id === subId) {
