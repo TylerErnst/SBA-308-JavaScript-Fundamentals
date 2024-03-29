@@ -82,7 +82,8 @@ function getLearnerData(course, ag, submissions) {
   // Similar data validation should occur elsewhere within the program.
   try {
     if (CourseInfo.id !== AssignmentGroup.course_id) {
-      throw new Error("Course IDs do not match");
+      const errorMessage = "Course IDs do not match";
+      throw new Error(errorMessage);
     } else {
       // here, we would process this data to achieve the desired result.
 
@@ -110,7 +111,7 @@ function getLearnerData(course, ag, submissions) {
       //adjust submission scores for lateness
       let latePenalty = 0.1;
       submissions.forEach((submission) => {
-        let i = assignmentSubmissionIndex(submission.assignment_id, ag);
+        let i = getMatchingIndex(submission.assignment_id, ag);
         let dueAt = ag.assignments[i].due_at;
         if (submission.submission.submitted_at > dueAt) {
           submission.submission.score -=
@@ -141,6 +142,8 @@ function getLearnerData(course, ag, submissions) {
       for (let i = 0; i < ag.assignments.length; i++){
         if (ag.assignments[i].due_at <= todaysdate) {
             dueAssignmentList.push(ag.assignments[i].id);
+          }else {
+            continue;
           }
       }
     //   ag.assignments.forEach((assignment) => {
@@ -148,7 +151,7 @@ function getLearnerData(course, ag, submissions) {
     //       dueAssignmentList.push(assignment.id);
     //     }
     //   });
-      console.log(dueAssignmentList);
+      console.log('assignments due:', dueAssignmentList);
 
       //add each submition to each student
       result.forEach((student) => {
@@ -161,7 +164,7 @@ function getLearnerData(course, ag, submissions) {
             if (student.id === submission.learner_id) {
               totalScore +=
                 ag.assignments[
-                  assignmentSubmissionIndex(submission.assignment_id, ag)
+                  getMatchingIndex(submission.assignment_id, ag)
                 ].points_possible;
               currentScore += submission.submission.score;
               console.log("student", student.id);
@@ -175,7 +178,8 @@ function getLearnerData(course, ag, submissions) {
         //Get average score
         try {
           if (totalScore === 0) {
-            throw new Error("Points possible cannot be 0");
+            const errorMessage = "Points possible cannot be 0";
+            throw new Error(errorMessage);
           } else {
             let averageScore = currentScore / totalScore;
             student.avg = averageScore;
@@ -222,7 +226,7 @@ function getLearnerData(course, ag, submissions) {
     console.log(error);
   }
 
-  function assignmentSubmissionIndex(subId, ag) {
+  function getMatchingIndex(subId, ag) {
     let agId = 0;
     ag.assignments.forEach((assignment, i) => {
       if (assignment.id === subId) {
@@ -262,7 +266,6 @@ console.log(result);
 
 // *****Remaining*****
 
-// Use strings cached within variables.
 // Use at least two if/else statements to control program flow. Optionally, use at least one switch statement.
 // Use try/catch statements to manage potential errors in the code, such as incorrectly formatted or typed data being fed into your program.
 // Utilize at least one loop control keyword such as break or continue.
